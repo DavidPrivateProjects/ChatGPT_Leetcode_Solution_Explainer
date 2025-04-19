@@ -18,6 +18,25 @@
     <button id="generateBtn">Generate ASCII Explanation</button>
     <pre id="output"></pre>
 
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const output = document.getElementById('output');
+    
+        generateBtn.addEventListener('click', async () => {
+          const description = document.getElementById('description').value;
+          const code = document.getElementById('code').value;
+    
+          if (!description || !code) {
+            alert('Please provide both a problem description and solution code.');
+            return;
+          }
+    
+          output.textContent = 'Generating...';
+          generateBtn.disabled = true;
+          generateBtn.disabled = false;
+        });
+      </script>
+
   </body>
   </html>
 

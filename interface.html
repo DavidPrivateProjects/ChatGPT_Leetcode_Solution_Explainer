@@ -30,13 +30,45 @@
             alert('Please provide both a problem description and solution code.');
             return;
           }
-    
+          
           output.textContent = 'Generating...';
+          // Disable button
           generateBtn.disabled = true;
-          generateBtn.disabled = false;
+          // Try calling the LLM API
+          try {
+            const response = await fetch("https://api.openrouter.ai/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": ""
+              },
+              body: JSON.stringify({
+                model: "openai/gpt-3.5-turbo",
+                messages: [
+                  {
+                    role: "system",
+                    content: "You are an assistant that explains algorithm code using ASCII art."
+                  },
+                  {
+                    role: "user",
+                    content: `Here is a problem description:\n${description}\n\nHere is the solution code:\n${code}\n\nGenerate an ASCII visualization that illustrates how this solution works.`
+                  }
+                ]
+              })
+            });
+
+            const data = await response.json();
+            output.textContent = data.choices?.[0]?.message?.content || "No response.";
+          } catch (err) {
+            // returns an error, if no response was received.
+            console.error(err);
+            output.textContent = "Error generating ASCII visualization.";
+          } finally {
+            // enable button egain after API call is complete
+            generateBtn.disabled = false;
+          }
         });
       </script>
-
   </body>
   </html>
 
